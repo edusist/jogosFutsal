@@ -45,7 +45,7 @@
                         </table>
                 </div>
             </div>
-            <h1>X</h1>
+            <h1 class="text-center">X</h1>
             <div class="col-md-6">
                 <div class="table">
                     <table class="table table-hover" id="id_tabela">
@@ -73,8 +73,6 @@
                                     <td>{{ $valor->nome_time}}</td>
                                     {{-- <td> <a href="{{ route('timesFutsal.alterarJogadorTime', $valor->id) }}" class="btn btn-success">Alterar</a></td> --}}
                                 @endif
-
-
                             </tr>
 
 
