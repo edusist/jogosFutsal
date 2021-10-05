@@ -57,6 +57,9 @@ Route::middleware(['web'])->group(function () {
     Route::post('/time-futsal', [TimeFutsalController::class, 'store'])->name('timesFutsal.store');
 
     Route::get('/rodada', [TimeFutsalController::class, 'rodadaCreate'])->name('timesFutsal.criarRodada');
+    Route::get('/lista-rodada', [TimeFutsalController::class, 'listarRodada'])->name('timesFutsal.listaRodadas');
+    // Route::put('/time-futsal/alteradoJogador/{id}', [TimeFutsalController::class, 'alteradoJogador'])->name('timesFutsal.alteradoJogador');
+    // Route::get('/time-futsal/alterar-jogador-time/{id}', [TimeFutsalController::class, 'alterarJogadorTime'])->name('timesFutsal.alterarJogadorTime');
 
-    // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 });

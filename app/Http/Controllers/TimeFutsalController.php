@@ -27,7 +27,7 @@ class TimeFutsalController extends Controller
 
         return view('timesFutsal.index', compact('timesFutsal'));
     }
-
+//******************************************************************** */
     public function create()
     {
         return view("timesFutsal.create");
@@ -88,20 +88,8 @@ class TimeFutsalController extends Controller
         return redirect()->route('timesFutsal.index')->with('success', 'time alterado com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    //******************************************************************** */
     public function show($id)
     {
         $timesFutsal = Time::where('id', $id)->first();
@@ -112,7 +100,7 @@ class TimeFutsalController extends Controller
 
         return view('timesFutsal.show', compact('timesFutsal'));
     }
-
+    //******************************************************************** */
     public function destroy($id)
     {
         $timesFutsal = Time::find($id);
@@ -125,7 +113,7 @@ class TimeFutsalController extends Controller
         return redirect()->route('timesFutsal.index')->with('success', 'time excluído com sucesso!');
     }
 
-
+    //******************************************************************** */
     public function rodadaCreate()
     {
         $listaJogadores = Jogador::all();
@@ -173,18 +161,6 @@ class TimeFutsalController extends Controller
 
         //dd($tamTime);
 
-        // for ($j = 0; $j < $tamTime; $j++) {
-        //     // var_dump($goleiros[$j]);
-        //     // var_dump($timesformados[$j]);
-
-        //     $RodadaAdd =  Rodada::create([
-
-        //         'data_rodada' => $dataAtual,
-        //         'user_id' => $id,
-        //         'jogador_id' =>  $goleiros[$j],
-        //         'timefutsal_id' =>  $timesformados[$j]
-        //     ]);
-        // }
 
         $sortearTime = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
 
@@ -200,16 +176,14 @@ class TimeFutsalController extends Controller
                 'jogador_id' =>  $jogadoresLinha[$i],
                 'timefutsal_id' =>  $timeSorteado
             ]);
-
         }
 
         if ($rodadaAddJogador) {
 
             print_r("ok");
         }
-
     }
-
+    //******************************************************************** */
     public function embaralhaTimes($dado)
     {
         $arr = array();
@@ -227,7 +201,7 @@ class TimeFutsalController extends Controller
         }
         return $arrRetorno;
     }
-
+    //******************************************************************** */
     public function embaralhaUmValor($dado)
     {
         $arr = array();
@@ -246,10 +220,42 @@ class TimeFutsalController extends Controller
         //return $arrRetorno;
     }
 
-
-    public function montarTimesRodada()
+    //******************************************************************** */
+    public function listarRodada()
     {
+        $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
+            ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
+            ->orderBy('rodadas.id', 'ASC')
+            ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
+            ->get();
+
+        return view('timesFutsal.listaRodadas', compact('rodada'));
     }
+
+    public function alterarJogadorTime($id){
+
+       $rodada = Rodada::find($id);
+       $listRodadas = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
+       //dd($rodada);
+
+       return view('timesFutsal.alterarJogadorTime', compact('rodada', 'listRodadas'));
+
+    }
+    public function alteradoJogador(Request $request, $id){
+
+        $rodada  = Rodada::find($id);
+
+
+        if (!$rodada) :
+
+            return redirect()->back();
+        endif;
+
+        $data = $request->all();
+        $rodada->update($data);
+        return redirect()->route('timesFutsal.listaRodadas')->with('success', 'Time atualizado com sucesso!');
+    }
+
+    //******************************************************************** */
+
 }
-
-
