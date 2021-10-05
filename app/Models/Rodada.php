@@ -9,5 +9,5 @@ class Rodada extends Model
 {
     use HasFactory;
 
-    protected $fillable =  ['data_rodada', 'user_id', 'jogador_id', 'time_id', 'created_at', 'updated_at'];
+    protected $fillable =  ['data_rodada', 'user_id', 'jogador_id', 'timefutsal_id', 'created_at', 'updated_at'];
 }

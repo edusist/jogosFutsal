@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="text-center">Jogadores</h1>
+                <h1 class="text-center">Times de Futsal</h1>
                 {{-- <a href="{{route('auth/logout')}}">Logout</a> --}}
                 <div class="table">
                     <table class="table table-hover" id="id_tabela">
@@ -18,28 +18,24 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nome</th>
-                                <th>Posicao</th>
-                                <th>Nivel</th>
-                                <th>Presente</th>
 
                                 <th>Ações</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($jogadores as $jogador)
+                            @foreach ($timesFutsal as $time_futsal)
                             <tr>
 
-                                <td>{{ $jogador->id }}</td>
-                                <td>{{ $jogador->nome_jogador }}</td>
-                                <td>{{ $jogador->posicao }}</td>
-                                <td>{{ $jogador->nivel }}</td>
-                                <td>{{ $jogador->presente }}</td>
+                                <td>{{ $time_futsal->id }}</td>
+                                <td>{{ $time_futsal->nome_time}}</td>
+
+
 
          <td>
-           <a href="{{ route('jogadores.edit', $jogador->id) }}" class="btn btn-success">Alterar</a>
+           <a href="{{ route('timesFutsal.edit', $time_futsal->id) }}" class="btn btn-success">Alterar</a>
              |
-            <a href="{{ route('jogadores.show', $jogador->id) }}" class="btn btn-danger">Excluir</a>
+            <a href="{{ route('timesFutsal.show', $time_futsal->id) }}" class="btn btn-danger">Excluir</a>
 
         </td>
 
@@ -52,6 +48,6 @@
                 </div>
             </div>
         </div>
-        {{ $jogadores->links() }}
+        {{ $timesFutsal->links() }}
 
 @endsection
