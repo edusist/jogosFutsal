@@ -233,7 +233,8 @@ class TimeFutsalController extends Controller
 
     //******************************************************************** */
     public function listarRodada()
-    {
+
+    {   //lista rodadas
         $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
             ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
             ->where('jogadores.presente', 'sim')
