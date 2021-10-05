@@ -116,7 +116,7 @@ class TimeFutsalController extends Controller
     //******************************************************************** */
     public function rodadaCreate()
     {
-        $listaJogadores = Jogador::all();
+        $listaJogadores = Jogador::where('jogadores.presente', 'sim')->get();
 
         $quant_jogadores =  count($listaJogadores);
 
@@ -128,7 +128,7 @@ class TimeFutsalController extends Controller
 
                 if ($value->posicao == 'goleiro') {
 
-                    $posicao = $value->posicao;
+                   // $posicao = $value->posicao;
 
                     $goleiro[] = $value;
                     // $nivelGoleiro[] =  $value->nivel;
@@ -236,6 +236,7 @@ class TimeFutsalController extends Controller
     {
         $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
             ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
+            ->where('jogadores.presente', 'sim')
             ->orderBy('rodadas.id', 'ASC')
             ->limit(12)
             ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')

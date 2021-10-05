@@ -42,7 +42,7 @@ class JogadorController extends Controller
     public function store(ValidacaoFormulario $request)
     {
         $dados = $request->all();
-        dd($dados);
+        //dd($dados);
         Jogador::create($dados);
         return redirect()->route('jogadores.index')->with('success', 'Jogador cadastrado com sucesso!');
     }
