@@ -42,6 +42,15 @@
                       <li><a class="dropdown-item" href="{{ route('timesFutsal.create') }}">Cadastrar Time</a></li>
                     </ul>
                   </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                       Rodada
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="{{ route('timesFutsal.listaRodadas') }}">Listar Rodada</a></li>
+                      <li><a class="dropdown-item" href="{{ route('timesFutsal.criarRodada') }}">Cadastrar Rodada</a></li>
+                    </ul>
+                  </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{{route('logout')}}">Logout</a>
                   </li>
