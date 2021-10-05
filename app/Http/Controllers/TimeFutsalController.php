@@ -147,7 +147,7 @@ class TimeFutsalController extends Controller
         $times = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
 
         //dd($times);
-        $timesformados = $this->embaralhaTimes($times);
+        $timesformados  = $this->embaralhaTimes($times);
         $goleiros       = $this->embaralhaTimes($goleiro);
         $jogadoresLinha = $this->embaralhaTimes($jogadorLinha);
 
@@ -159,8 +159,19 @@ class TimeFutsalController extends Controller
         $tamTime = count($timesformados);
         $tamJogador = count($jogadoresLinha);
 
-        //dd($tamTime);
 
+        for ($j = 0; $j < $tamTime; $j++) {
+
+            $goleiros[$j];
+
+            $RodadaAddGoleiro =  Rodada::create([
+
+                'data_rodada' => $dataAtual,
+                'user_id' => $id,
+                'jogador_id' =>  $goleiros[$j],
+                'timefutsal_id' =>  $timesformados[$j]
+            ]);
+        }
 
         $sortearTime = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
 
@@ -178,9 +189,9 @@ class TimeFutsalController extends Controller
             ]);
         }
 
-        if ($rodadaAddJogador) {
+        if ($rodadaAddJogador && $RodadaAddGoleiro) {
 
-            print_r("ok");
+            redirect()->route('timesFutsal.listaRodadas')->with('success', 'Time Adicionado com sucesso!');
         }
     }
     //******************************************************************** */
@@ -226,7 +237,9 @@ class TimeFutsalController extends Controller
         $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
             ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
             ->orderBy('rodadas.id', 'ASC')
+            ->limit(12)
             ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
+
             ->get();
 
         return view('timesFutsal.listaRodadas', compact('rodada'));

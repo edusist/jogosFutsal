@@ -21,7 +21,7 @@ use App\Http\Controllers\{
 
 Route::get('/', function(){
 
-    return redirect('/index');
+    return redirect('/jogadores');
 });
 
 
