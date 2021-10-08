@@ -18,9 +18,11 @@ class JogadorController extends Controller
 
     public function index()
     {
-        $jogadores = Jogador::paginate($this->numeroPaginas);
+        $jogadores = Jogador::orderBy('nivel', 'desc')->get();
 
-        return view('jogadores.index', compact('jogadores'));
+        $quantJogadores = count($jogadores);
+
+        return view('jogadores.index', compact('jogadores', 'quantJogadores'));
     }
 
     /**
@@ -42,7 +44,7 @@ class JogadorController extends Controller
     public function store(ValidacaoFormulario $request)
     {
         $dados = $request->all();
-        dd($dados);
+        //dd($dados);
         Jogador::create($dados);
         return redirect()->route('jogadores.index')->with('success', 'Jogador cadastrado com sucesso!');
     }

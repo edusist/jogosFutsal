@@ -13,6 +13,9 @@ class TimeFutsalController extends Controller
 {
 
     private $numeroPaginas = 10;
+    protected $time1;
+    protected $time2;
+    protected $time3;
     /**
      *
      * Display a listing of the resource.
@@ -23,11 +26,11 @@ class TimeFutsalController extends Controller
     {
 
 
-        $timesFutsal = Time::paginate($this->numeroPaginas);
+        $timesFutsal = Time::all();
 
         return view('timesFutsal.index', compact('timesFutsal'));
     }
-//******************************************************************** */
+    //******************************************************************** */
     public function create()
     {
         return view("timesFutsal.create");
@@ -113,40 +116,122 @@ class TimeFutsalController extends Controller
         return redirect()->route('timesFutsal.index')->with('success', 'time excluído com sucesso!');
     }
 
+
+
+    //******************************************************************** */
+    public function listarRodada()
+    {
+        //lista rodadas
+        $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
+            ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
+            ->where('jogadores.presente', 'sim')
+            ->orderBy('rodadas.id', 'ASC')
+            ->limit(12)
+            ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
+            ->get();
+
+
+        $time3  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
+            ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
+            ->orderBy('rodadas.id', 'ASC')
+            ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
+            ->get();
+
+
+        return view('timesFutsal.listaRodadas', compact('rodada', 'time3'));
+    }
+    //******************************************************************** */
+    public function alterarJogadorTime($id)
+    {
+
+        $rodada = Rodada::find($id);
+        $listRodadas = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
+        //dd($rodada);
+
+        return view('timesFutsal.alterarJogadorTime', compact('rodada', 'listRodadas'));
+    }
+    //*************************Montagem de time******************************************* */
+    public function montarTime(Request $request)
+    {
+
+        $quantDefUsuario = $request->input('numerojogadores');
+        $numeroJogadoresTime = $quantDefUsuario * 2;
+
+        $jogadores = Jogador::select('id')->where('presente', 'sim')->get();
+
+        $arrJogadorTime1 = array();
+
+        foreach ($jogadores as $value) {
+
+            $arrJogadorTime1[] = $value->id;
+        }
+
+        //Sortea os jogadores
+        shuffle($arrJogadorTime1);
+
+        $arrRetorno = array();
+
+        foreach ($arrJogadorTime1 as $value) {
+
+            $arrRetorno[] = $value;
+        }
+
+        $jogadoresConfirmados = count($jogadores);
+
+        //print_r($jogadoresConfirmados."<".$numeroJogadoresTime);
+
+        //Verifica se número de confirmados e menor por time
+        if ($jogadoresConfirmados < $numeroJogadoresTime) {
+
+            print_r('Quantidade ' . $jogadoresConfirmados . ' é menor que ' . $numeroJogadoresTime . ' definida pelo usuário menor por time!');
+        } else {
+            //dividi o número de jogadores por 2 times
+            print_r('Confirmados' . $jogadoresConfirmados . '<br>Quantidade definida pelo usuário por time!' . $quantDefUsuario);
+
+            $jogadoresPorTime = $numeroJogadoresTime/2;
+
+            //array_chunk(array, int $size , bool $preserve_keys=false): array
+            $times = array_chunk($arrRetorno, $jogadoresPorTime);
+
+            foreach ($times as $key => $value) {
+                echo "<pre>";
+                print_r("time".$key);
+                echo "<br>";
+                print_r($value);
+                echo "<br>";
+                echo "</pre>";
+            }
+        }
+    }
+
     //******************************************************************** */
     public function rodadaCreate()
     {
-        $listaJogadores = Jogador::all();
+        $listaJogadores = Jogador::where('jogadores.presente', 'sim')->get();
 
-        $quant_jogadores =  count($listaJogadores);
-
-
-        if ($quant_jogadores >= '12') {
-
-            foreach ($listaJogadores as $value) {
+        //$quant_jogadores =  count($listaJogadores);
+        //var_dump($quant_jogadores);
 
 
-                if ($value->posicao == 'goleiro') {
 
-                    $posicao = $value->posicao;
+        foreach ($listaJogadores as $value) {
 
-                    $goleiro[] = $value;
-                    // $nivelGoleiro[] =  $value->nivel;
 
-                } else {
+            if ($value->posicao == 'goleiro') {
 
-                    $jogadorLinha[] = $value;
-                } //fim if verifica se é goleiro
-            } //fim foreach
-        } else {
-            echo "Não possível montar 2 times";
-        } //fim if de quantidade de jogadores
+                // $posicao = $value->posicao;
 
-        // $times = Time::select('id')->get();
+                $goleiro[] = $value;
+                // $nivelGoleiro[] =  $value->nivel;
+
+            } else {
+
+                $jogadorLinha[] = $value;
+            } //fim if verifica se é goleiro
+        } //fim foreach
 
         $times = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
 
-        //dd($times);
         $timesformados  = $this->embaralhaTimes($times);
         $goleiros       = $this->embaralhaTimes($goleiro);
         $jogadoresLinha = $this->embaralhaTimes($jogadorLinha);
@@ -154,7 +239,8 @@ class TimeFutsalController extends Controller
         //print_r($goleiros);
         $dt = new DateTime();
         $dataAtual = $dt->format("Y-m-d H:i:s");
-        $id = Auth::user()->id;
+        // $id = Auth::user()->id;//
+        $id = 1;
 
         $tamTime = count($timesformados);
         $tamJogador = count($jogadoresLinha);
@@ -164,8 +250,7 @@ class TimeFutsalController extends Controller
 
             $goleiros[$j];
 
-            $RodadaAddGoleiro =  Rodada::create([
-
+            Rodada::create([
                 'data_rodada' => $dataAtual,
                 'user_id' => $id,
                 'jogador_id' =>  $goleiros[$j],
@@ -175,13 +260,16 @@ class TimeFutsalController extends Controller
 
         $sortearTime = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
 
+
         for ($i = 0; $i < $tamJogador; $i++) {
 
             $jogadoresLinha[$i];
 
             $timeSorteado = $this->embaralhaUmValor($sortearTime);
+            //dd($timeSorteado);
 
-            $rodadaAddJogador =  Rodada::create([
+
+            Rodada::create([
                 'data_rodada' => $dataAtual,
                 'user_id' => $id,
                 'jogador_id' =>  $jogadoresLinha[$i],
@@ -189,11 +277,67 @@ class TimeFutsalController extends Controller
             ]);
         }
 
-        if ($rodadaAddJogador && $RodadaAddGoleiro) {
 
-            redirect()->route('timesFutsal.listaRodadas')->with('success', 'Time Adicionado com sucesso!');
+        $rodada = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
+            ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
+            ->where('jogadores.presente', 'sim')
+            ->orderBy('rodadas.id', 'ASC')
+            ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
+            ->get();
+
+        $arrJogadorTime1 = array();
+        $arrJogadorTime2 = array();
+
+        //mudar jogador de time
+        foreach ($rodada as $key => $value) {
+
+            if ($value->timefutsal_id === 1) {
+
+                $this->time1 = $value->timefutsal_id;
+
+                $arrJogadorTime1[] = $value->id;
+            } else {
+
+                $arrJogadorTime2[] = $value->id;
+                $this->time2 = $value->timefutsal_id;
+            }
+        }
+        $this->balancearTime($arrJogadorTime1, $arrJogadorTime2);
+    }
+
+    //******************************************************************** */
+    public function balancearTime($arrJogadorTime1, $arrJogadorTime2)
+    {
+
+
+        $quant_time = count($arrJogadorTime1);
+
+        if ($this->time1 == 1 && $quant_time > 6) {
+
+            $id_rodada1 = end($arrJogadorTime1);
+
+            $alterar1 = Rodada::find($id_rodada1)->update([
+                'timefutsal_id' => $this->time2,
+            ]);
+
+            if ($alterar1) {
+
+                redirect()->route('timesFutsal.listaRodadas')->with('success', 'Time Adicionado com sucesso!');
+            }
+        } else {
+            $id_rodada2 = end($arrJogadorTime2);
+            $alterar2 = Rodada::find($id_rodada2)->update([
+                'timefutsal_id' => $this->time1,
+            ]);
+
+            if ($alterar2) {
+
+                redirect()->route('timesFutsal.listaRodadas')->with('success', 'Time Adicionado com sucesso!');
+            }
         }
     }
+
+
     //******************************************************************** */
     public function embaralhaTimes($dado)
     {
@@ -216,10 +360,15 @@ class TimeFutsalController extends Controller
     public function embaralhaUmValor($dado)
     {
         $arr = array();
+        // $contador = 0;
         foreach ($dado as $key => $value) {
 
             $arr[] = $value->id;
+            //var_dump($arr);
         }
+
+
+        //print_r("Quant=> ".$contador);
         shuffle($arr);
 
         $arrRetorno = array();
@@ -231,30 +380,8 @@ class TimeFutsalController extends Controller
         //return $arrRetorno;
     }
 
-    //******************************************************************** */
-    public function listarRodada()
+    public function alteradoJogador(Request $request, $id)
     {
-        $rodada  = Rodada::join('jogadores', 'jogadores.id', '=', 'rodadas.jogador_id')
-            ->join('timesfutsal', 'timesfutsal.id', '=', 'rodadas.timefutsal_id')
-            ->orderBy('rodadas.id', 'ASC')
-            ->limit(12)
-            ->select('rodadas.id', 'rodadas.timefutsal_id', 'jogadores.posicao', 'jogadores.nivel', 'jogadores.nome_jogador', 'timesfutsal.nome_time')
-
-            ->get();
-
-        return view('timesFutsal.listaRodadas', compact('rodada'));
-    }
-
-    public function alterarJogadorTime($id){
-
-       $rodada = Rodada::find($id);
-       $listRodadas = Time::select('id')->OrderBy('created_at', 'ASC')->limit(2)->get();
-       //dd($rodada);
-
-       return view('timesFutsal.alterarJogadorTime', compact('rodada', 'listRodadas'));
-
-    }
-    public function alteradoJogador(Request $request, $id){
 
         $rodada  = Rodada::find($id);
 

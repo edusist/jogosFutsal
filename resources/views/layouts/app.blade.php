@@ -51,9 +51,6 @@
                       <li><a class="dropdown-item" href="{{ route('timesFutsal.criarRodada') }}">Cadastrar Rodada</a></li>
                     </ul>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{route('logout')}}">Logout</a>
-                  </li>
 
               </div>
             </div>
