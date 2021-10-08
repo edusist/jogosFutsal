@@ -18,9 +18,11 @@ class JogadorController extends Controller
 
     public function index()
     {
-        $jogadores = Jogador::paginate($this->numeroPaginas);
+        $jogadores = Jogador::orderBy('nivel', 'desc')->get();
 
-        return view('jogadores.index', compact('jogadores'));
+        $quantJogadores = count($jogadores);
+
+        return view('jogadores.index', compact('jogadores', 'quantJogadores'));
     }
 
     /**

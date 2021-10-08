@@ -11,7 +11,16 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 class="text-center">Jogadores</h1>
+
+                <form action="{{ route('timesFutsal.montarTime') }}" method="POST">
+                    @csrf
+                    <label for=""><strong>Número jogadores por time:</strong></label>
+                    <input type="number" name="numerojogadores" id="numerojogadores">
+
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </form>
                 {{-- <a href="{{route('auth/logout')}}">Logout</a> --}}
+                <h4>Quantidade de jogadores:<strong>{{$quantJogadores}}</strong></h4>
                 <div class="table">
                     <table class="table table-hover" id="id_tabela">
                         <thead>
@@ -52,6 +61,6 @@
                 </div>
             </div>
         </div>
-        {{ $jogadores->links() }}
+        {{-- {{ $jogadores->links() }} --}}
 
 @endsection

@@ -55,6 +55,7 @@ Route::middleware(['web'])->group(function () {
     Route::delete('/time-futsal/{id}', [TimeFutsalController::class, 'destroy'])->name('timesFutsal.destroy');
     Route::get('/time-futsal/{id}', [TimeFutsalController::class, 'show'])->name('timesFutsal.show');
     Route::post('/time-futsal', [TimeFutsalController::class, 'store'])->name('timesFutsal.store');
+    Route::post('/time-futsal/montarTime', [TimeFutsalController::class, 'montarTime'])->name('timesFutsal.montarTime');
 
     Route::get('/rodada', [TimeFutsalController::class, 'rodadaCreate'])->name('timesFutsal.criarRodada');
     Route::get('/lista-rodada', [TimeFutsalController::class, 'listarRodada'])->name('timesFutsal.listaRodadas');
