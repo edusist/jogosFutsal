@@ -38,19 +38,10 @@
                         Times
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item" href="{{ route('timesFutsal.index') }}">Listar Times</a></li>
-                      <li><a class="dropdown-item" href="{{ route('timesFutsal.create') }}">Cadastrar Time</a></li>
-                    </ul>
+                      <li><a class="dropdown-item" href="{{ route('timesFutsal.listarTimeRodada') }}">Listar Times</a></li>
+
                   </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                       Rodada
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item" href="{{ route('timesFutsal.listaRodadas') }}">Listar Rodada</a></li>
-                      <li><a class="dropdown-item" href="{{ route('timesFutsal.criarRodada') }}">Cadastrar Rodada</a></li>
-                    </ul>
-                  </li>
+
 
               </div>
             </div>

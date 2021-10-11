@@ -12,7 +12,7 @@
             <div class="col-md-12">
                 <h1 class="text-center">Jogadores</h1>
 
-                <form action="{{ route('timesFutsal.montarTime') }}" method="POST">
+                <form action="{{ route('timesFutsal.sortearTime') }}" method="POST">
                     @csrf
                     <label for=""><strong>Número jogadores por time:</strong></label>
                     <input type="number" name="numerojogadores" id="numerojogadores">
