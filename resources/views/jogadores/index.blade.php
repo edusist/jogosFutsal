@@ -4,8 +4,20 @@
 <hr>
 @if (session('success'))
     <div>
-        {{ session('success') }}
+        <div class="alert alert-success" role="alert">
+        <p>{{ session('success') }}</p>
+        </div>
     </div>
+@endif
+
+@if ($errors->any())
+
+        @foreach ($errors->all() as $error)
+        <div class="alert alert-danger" role="alert">
+            <p>{{ $error }}</p>
+        </div>
+        @endforeach
+
 @endif
 
         <div class="row">
