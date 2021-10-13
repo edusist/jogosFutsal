@@ -1,9 +1,11 @@
 @if ($errors->any())
-    <ul>
+
         @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+        <div class="alert alert-danger" role="alert">
+            <h4> {{ $error }}</h4>
+        </div>
         @endforeach
-    </ul>
+
 @endif
 <!-- Link para voltar -->
 <a href="{{ route('jogadores.index') }}" class="btn btn-primary">Voltar</a>

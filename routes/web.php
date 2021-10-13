@@ -24,9 +24,6 @@ Route::get('/', function(){
     return redirect('/jogadores');
 });
 
-
-Route::middleware(['web'])->group(function () {
-
     Route::get('/home', function(){
         return redirect('/jogadores');
     });
@@ -37,7 +34,7 @@ Route::middleware(['web'])->group(function () {
 
     // Route::get('/login', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
-    Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
+    // Route::get('/logout', 'App\Http\Controllers\Auth\LoginController@logout')->name('logout');
 
     Route::get('/jogadores', [JogadorController::class, 'index'])->name('jogadores.index');
     Route::get('/jogadores/create', [JogadorController::class, 'create'])->name('jogadores.create');
@@ -47,19 +44,9 @@ Route::middleware(['web'])->group(function () {
     Route::get('/jogadores/{id}', [JogadorController::class, 'show'])->name('jogadores.show');
     Route::post('/jogadores', [JogadorController::class, 'store'])->name('jogadores.store');
 
-
-    Route::get('/time-futsal', [TimeFutsalController::class, 'index'])->name('timesFutsal.index');
-    Route::get('/time-futsal/create', [TimeFutsalController::class, 'create'])->name('timesFutsal.create');
-    Route::put('/time-futsal/{id}', [TimeFutsalController::class, 'update'])->name('timesFutsal.update');
-    Route::get('/time-futsal/edit/{id}', [TimeFutsalController::class, 'edit'])->name('timesFutsal.edit');
-    Route::delete('/time-futsal/{id}', [TimeFutsalController::class, 'destroy'])->name('timesFutsal.destroy');
-    Route::get('/time-futsal/{id}', [TimeFutsalController::class, 'show'])->name('timesFutsal.show');
-    Route::post('/time-futsal', [TimeFutsalController::class, 'store'])->name('timesFutsal.store');
     Route::post('/time-futsal/sortear-time', [TimeFutsalController::class, 'sortearTime'])->name('timesFutsal.sortearTime');
 
-    Route::get('/rodada', [TimeFutsalController::class, 'rodadaCreate'])->name('timesFutsal.criarRodada');
-    Route::get('/listar-times-rodada', [TimeFutsalController::class, 'listarTimeRodada'])->name('timesFutsal.listarTimeRodada');
+    Route::get('/excluir-times-rodada', [TimeFutsalController::class, 'excluirTimesRodada'])->name('excluirTimesRodada');
+    Route::get('/listar-times-rodada', [TimeFutsalController::class, 'listarTimeRodada'])->name('listarTimeRodada');
 
 
-
-});
